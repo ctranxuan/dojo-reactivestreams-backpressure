@@ -37,3 +37,8 @@ As matter of fact, subscribing twice to a publisher will create two independant 
 
     subscriber1   subscriber2
 ----
+
+=== RequestPaceSubscriber
+
+This shows how the subscriber can regulate the upstream by controlling the number
+of element it can handle before receiving new elements (backpressure regulation)
