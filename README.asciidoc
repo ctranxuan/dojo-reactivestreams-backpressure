@@ -1,6 +1,10 @@
-= Pre-requisites
+== Objectives
 
-== Mongodb
+Study some Reactive Streams stuff (backpressure, etc.).
+
+== Pre-requisites
+
+=== Mongodb
 
 You can install and run a Mongodb docker image:
 
@@ -9,3 +13,27 @@ docker pull mongo
 docker run -p 27017:27017 --name cara-dojo -d mongo
 ```
 
+== Examples
+
+=== TwoSubscribersExample
+
+With the http://mongodb.github.io/mongo-java-driver-reactivestreams/[Reactive Streams Mongodb driver],
+all the publishers are cold.
+As matter of fact, subscribing twice to a publisher will create two independant streams.
+
+
+[ditaa]
+----
+     +-----------------+
+     | {s}             |
+     |      mongo      |
+     |             cB8F|
+     +-----------------+
+      driver       driver
+         |           |
+         |           |
+         |           |
+         v           v
+
+    subscriber1   subscriber2
+----

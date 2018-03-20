@@ -15,9 +15,9 @@ import static java.util.stream.Collectors.toList;
 /**
  * @author ctranxuan
  */
-public final class MongodbUtil {
+public final class DojoUtil {
 
-    private MongodbUtil() {}
+    private DojoUtil() {}
 
     public static MongoCollection<Document> createCollection() {
         MongoClient mongoClient = MongoClients.create("mongodb://localhost");
@@ -26,7 +26,7 @@ public final class MongodbUtil {
         MongoCollection<Document> collection = database.getCollection("test");
 
         List<Document> documents = IntStream.range(0, 10000)
-                                            .mapToObj(MongodbUtil::makeDoc)
+                                            .mapToObj(DojoUtil::makeDoc)
                                             .collect(toList());
 
         Flowable.fromPublisher(collection.insertMany(documents))
@@ -35,8 +35,9 @@ public final class MongodbUtil {
         return collection;
     }
 
-    private static Document makeDoc(int aIndex) {
 
+
+    private static Document makeDoc(int aIndex) {
         return new Document("name", "doc-" + aIndex)
                         .append("type", "database")
                         .append("count", aIndex)
