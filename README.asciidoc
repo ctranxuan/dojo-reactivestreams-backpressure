@@ -29,7 +29,7 @@ As matter of fact, subscribing twice to a publisher will create two independant 
      |      mongo      |
      |             cB8F|
      +-----------------+
-      driver       driver
+      find()       find()
          |           |
          |           |
          |           |
@@ -42,3 +42,55 @@ As matter of fact, subscribing twice to a publisher will create two independant 
 
 This shows how the subscriber can regulate the upstream by controlling the number
 of element it can handle before receiving new elements (backpressure regulation)
+
+[ditaa]
+----
+     +-----------------+
+     | {s}             |
+     |      mongo      |
+     |             cB8F|
+     +-----------------+
+           find()
+
+            | ^
+            | |
+            | request(n)
+            | |
+            v |
+
+        subscriber
+----
+
+==== HotFlowableWithDifferentPaceSubsribers
+
+This example illustrates how the upstream behaves with two subscribers which
+request more elements at different paces.
+
+Example1: the slowest subscriber drives the rhythm. Indeed, the Rx chain operates
+on the same scheduler for the whole stream.
+
+Example2: the upstream operates on a scheduler, while the subscribers operates
+on different schedulers. `observeOn()` has by default a queue of 128.
+The queue of the `observeOn()` of the slowest subscriber is full before the one
+of the fastest: the fastest has to wait the queue of the slowest subscriber
+gets empty.
+
+[ditaa]
+----
+     +-----------------+
+     | {s}             |
+     |      mongo      |
+     |             cB8F|
+     +-----------------+
+            find()
+              |
+              v
+
+            share()
+        ^ +-      -+ ^
+        | |        | |
+request(m)|        | request(n)
+        | v        v |
+
+    subscriber1   subscriber2
+----
