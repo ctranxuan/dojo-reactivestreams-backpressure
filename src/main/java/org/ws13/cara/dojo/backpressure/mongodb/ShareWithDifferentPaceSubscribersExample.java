@@ -12,11 +12,12 @@ import static java.util.concurrent.TimeUnit.MINUTES;
 /**
  * @author ctranxuan
  */
-public final class HotFlowableWithDifferentPaceSubscribersExample {
+public final class ShareWithDifferentPaceSubscribersExample {
 
     public static void main(String[] args) {
 //        example1();
         example2();
+//        example3();
     }
 
     private static void example1() {
@@ -47,6 +48,23 @@ public final class HotFlowableWithDifferentPaceSubscribersExample {
 
         sharedFlowable
                 .observeOn(computation())
+                .subscribeWith(new RequestPaceSubscriber<>("arthur", 1000, 1));
+
+        Flowable.timer(10, MINUTES)
+                .blockingSubscribe();
+    }
+
+    private static void example3() {
+        MongoCollection<Document> collection = DojoUtil.createCollection();
+
+        Flowable<Document> sharedFlowable = Flowable.fromPublisher(collection.find())
+                .observeOn(computation())
+                .share();
+
+        sharedFlowable
+                .subscribeWith(new RequestPaceSubscriber<>("ford", 1, Long.MAX_VALUE));
+
+        sharedFlowable
                 .subscribeWith(new RequestPaceSubscriber<>("arthur", 1000, 1));
 
         Flowable.timer(10, MINUTES)

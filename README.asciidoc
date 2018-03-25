@@ -61,7 +61,7 @@ of element it can handle before receiving new elements (backpressure regulation)
         subscriber
 ----
 
-==== HotFlowableWithDifferentPaceSubsribers
+==== ShareWithDifferentPaceSubsribers
 
 This example illustrates how the upstream behaves with two subscribers which
 request more elements at different paces.
