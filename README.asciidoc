@@ -38,6 +38,30 @@ As matter of fact, subscribing twice to a publisher will create two independant 
     subscriber1   subscriber2
 ----
 
+=== BackpressureRegulationExample
+
+This shows how the subscriber can regulate the upstream by requesting
+a new element after a long job has been processed.
+The upstream must supports backpressure.
+
+[ditaa]
+----
+     +-----------------+
+     | {s}             |
+     |      mongo      |
+     |             cB8F|
+     +-----------------+
+           find()
+
+            | ^
+            | |
+            | request(1)
+            |         |
+            v         |
+
+        subscriber (process job)
+----
+
 === RequestPaceSubscriber
 
 This shows how the subscriber can regulate the upstream by controlling the number
